@@ -1,9 +1,10 @@
 #!/usr/bin/python3
 
+import bs4
 import json
+import random
 import re
 import sys
-import bs4
 
 import html2markdown
 
@@ -44,6 +45,11 @@ if __name__ == '__main__':
     games = None
     with open(infile, 'r') as f:
         games = json.loads(f.read())
+
+    # shuffle (deterministically) in order to prevent the model from
+    # thinking sequential games are related (they are by default in id order,
+    # which often means they are actually related).
+    random.Random(0).shuffle(games)
 
     bad_ids = {
         # can't get markdown to generate right
